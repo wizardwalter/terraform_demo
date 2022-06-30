@@ -4,8 +4,29 @@ resource "aws_key_pair" "levelup_key" {
     public_key = file(var.PATH_TO_PUBLIC_KEY)
 }
 
+data "aws_ami" "east_2_ami" {
+  most_recent      = true
+  owners           = ["amazon"]
+  
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+}
+
+data "aws_availability_zone" "my_az" {
+  state = "available"
+}
+
+
 resource "aws_instance" "MyFirstInstnace" {
-  ami           = lookup(var.AMIS, var.AWS_REGION)
+  ami           = data.aws_ami.east_2_ami.id
   instance_type = "t2.micro"
   key_name      = aws_key_pair.levelup_key.key_name
 
