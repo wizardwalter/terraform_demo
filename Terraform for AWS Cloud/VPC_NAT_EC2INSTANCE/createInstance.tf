@@ -20,7 +20,7 @@ data "aws_ami" "east_2_ami" {
 
 }
 
-data "aws_availability_zone" "my_az" {
+data "aws_availability_zones" "my_az" {
   name = var.AWS_REGION
   state = "available"
 }
